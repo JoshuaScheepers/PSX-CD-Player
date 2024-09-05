@@ -1,1 +1,1 @@
-still needs program mode
+hmm, i think i got it :)
