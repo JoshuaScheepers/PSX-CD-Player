@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cfqwv5ewenchu"]
+
+[ext_resource type="Texture2D" uid="uid://csgk20dwxhb67" path="res://Assets/cursor.png" id="1_clglu"]
+
+[node name="cursor" type="Sprite2D"]
+position = Vector2(64, 250)
+texture = ExtResource("1_clglu")
+centered = false
