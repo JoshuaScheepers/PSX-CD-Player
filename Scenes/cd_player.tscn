@@ -1,0 +1,1040 @@
+[gd_scene load_steps=26 format=3 uid="uid://dm6rdy4gw7uf2"]
+
+[ext_resource type="Script" path="res://Scripts/cd_player.gd" id="1_fjt1b"]
+[ext_resource type="Texture2D" uid="uid://cbb2b8cw88ito" path="res://Assets/bg.png" id="1_o7ebn"]
+[ext_resource type="Shader" path="res://Shaders/cd_player.gdshader" id="2_8buio"]
+[ext_resource type="Texture2D" uid="uid://dbwlq1qkml7pt" path="res://Assets/CD_PLAYER_logo_bg.png" id="2_crd55"]
+[ext_resource type="Texture2D" uid="uid://nfuliodjlti1" path="res://Assets/original_image.png" id="2_crlpl"]
+[ext_resource type="Texture2D" uid="uid://dcfkhgi70rhum" path="res://Assets/button_orb.png" id="2_jfwso"]
+[ext_resource type="Texture2D" uid="uid://dh654ux5wjyx3" path="res://Assets/continue_button.png" id="4_5lrfy"]
+[ext_resource type="Texture2D" uid="uid://ldtux42xd53p" path="res://Assets/repeat_button.png" id="5_43gxe"]
+[ext_resource type="Texture2D" uid="uid://bxdxhiajve7t6" path="res://Assets/shuffle_button.png" id="5_evnbg"]
+[ext_resource type="Texture2D" uid="uid://cwfkwpplw5fdp" path="res://Assets/program_button.png" id="6_dl6q2"]
+[ext_resource type="Texture2D" uid="uid://bdte3k0ue8y7n" path="res://Assets/time_button.png" id="7_bsh4r"]
+[ext_resource type="Texture2D" uid="uid://cax5hq7bo8oxp" path="res://Assets/exit_button.png" id="9_5rqtl"]
+[ext_resource type="Texture2D" uid="uid://d0rnd2no2rpuv" path="res://Assets/button_orb_small.png" id="13_pq5h4"]
+[ext_resource type="PackedScene" uid="uid://cfqwv5ewenchu" path="res://Scenes/cursor.tscn" id="13_vo2kb"]
+[ext_resource type="Texture2D" uid="uid://bm5c3wjrtt6k2" path="res://Assets/next_icon.png" id="14_ftplp"]
+[ext_resource type="Texture2D" uid="uid://bhebmr3uunxmv" path="res://Assets/seek_forward_icon.png" id="15_04n8y"]
+[ext_resource type="Texture2D" uid="uid://1itp55t241s6" path="res://Assets/play_icon.png" id="16_jncu3"]
+[ext_resource type="Texture2D" uid="uid://2gejihy1w1lh" path="res://Assets/stop_icon.png" id="17_g0l5h"]
+[ext_resource type="Texture2D" uid="uid://k80djb55oce1" path="res://Assets/pause_icon.png" id="18_m0s5g"]
+[ext_resource type="Texture2D" uid="uid://ol6xoy7dotb2" path="res://Assets/seek_backwards_icon.png" id="19_51dsp"]
+[ext_resource type="Texture2D" uid="uid://cidr0ih135ttu" path="res://Assets/previous_icon.png" id="20_1k77y"]
+[ext_resource type="Texture2D" uid="uid://bnyqpn414dpr4" path="res://Assets/state_display.png" id="22_38nca"]
+[ext_resource type="Shader" path="res://Shaders/visualiser.gdshader" id="23_mj4pq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x8us2"]
+shader = ExtResource("2_8buio")
+shader_parameter/overlay = true
+shader_parameter/scanlines_opacity = 0.07
+shader_parameter/scanlines_width = 0.0
+shader_parameter/grille_opacity = 0.012
+shader_parameter/resolution = Vector2(640, 343.82)
+shader_parameter/pixelate = false
+shader_parameter/roll = true
+shader_parameter/roll_speed = 0.887
+shader_parameter/roll_size = 6.946
+shader_parameter/roll_variation = 0.297
+shader_parameter/distort_intensity = 0.004
+shader_parameter/noise_opacity = 0.051
+shader_parameter/noise_speed = 0.759
+shader_parameter/static_noise_intensity = 0.046
+shader_parameter/aberration = -0.00499995
+shader_parameter/brightness = 0.975
+shader_parameter/discolor = false
+shader_parameter/warp_amount = 0.07
+shader_parameter/clip_warp = true
+shader_parameter/vignette_intensity = -0.185
+shader_parameter/vignette_opacity = 0.265
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k6vvx"]
+shader = ExtResource("23_mj4pq")
+shader_parameter/is_card = true
+shader_parameter/iTime = 0.0
+shader_parameter/iChannelResolution1 = Vector2(0, 0)
+
+[node name="CD_Player" type="Node2D"]
+script = ExtResource("1_fjt1b")
+
+[node name="CRT" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="VHS" type="ColorRect" parent="CRT"]
+material = SubResource("ShaderMaterial_x8us2")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="background" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("1_o7ebn")
+centered = false
+
+[node name="CD_PLAYER_logo" type="Sprite2D" parent="."]
+position = Vector2(539.5, 47.5)
+texture = ExtResource("2_crd55")
+
+[node name="original_image_reference" type="Sprite2D" parent="."]
+visible = false
+texture = ExtResource("2_crlpl")
+centered = false
+
+[node name="playbackButtons" type="VBoxContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 34.0
+offset_top = 24.0
+offset_right = 87.0
+offset_bottom = 475.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="next_button" type="TextureButton" parent="playbackButtons"]
+modulate = Color(0, 1, 0.270588, 1)
+self_modulate = Color(1.5, 1.5, 1.5, 1)
+layout_mode = 2
+focus_neighbor_left = NodePath("../../trackNumbers/track_05_button")
+focus_neighbor_top = NodePath("../previous_button")
+focus_neighbor_right = NodePath("../../trackNumbers/track_01_button")
+focus_neighbor_bottom = NodePath("../seek_forward_button")
+texture_normal = ExtResource("2_jfwso")
+stretch_mode = 3
+
+[node name="seek_forward_button" type="TextureButton" parent="playbackButtons"]
+modulate = Color(0, 1, 0.270588, 1)
+self_modulate = Color(1.5, 1.5, 1.5, 1)
+layout_mode = 2
+focus_neighbor_left = NodePath("../../trackNumbers/track_05_button")
+focus_neighbor_top = NodePath("../next_button")
+focus_neighbor_right = NodePath("../../trackNumbers/track_01_button")
+focus_neighbor_bottom = NodePath("../play_button")
+texture_normal = ExtResource("2_jfwso")
+stretch_mode = 3
+
+[node name="play_button" type="TextureButton" parent="playbackButtons"]
+layout_mode = 2
+focus_neighbor_left = NodePath("../../trackNumbers/track_10_button")
+focus_neighbor_top = NodePath("../seek_forward_button")
+focus_neighbor_right = NodePath("../../trackNumbers/track_06_button")
+focus_neighbor_bottom = NodePath("../stop_button")
+texture_normal = ExtResource("2_jfwso")
+stretch_mode = 6
+
+[node name="stop_button" type="TextureButton" parent="playbackButtons"]
+modulate = Color(1, 0, 0, 1)
+self_modulate = Color(1.5, 1, 1, 1)
+layout_mode = 2
+focus_neighbor_left = NodePath("../../trackNumbers/track_15_button")
+focus_neighbor_top = NodePath("../play_button")
+focus_neighbor_right = NodePath("../../trackNumbers/track_11_button")
+focus_neighbor_bottom = NodePath("../pause_button")
+texture_normal = ExtResource("2_jfwso")
+stretch_mode = 3
+
+[node name="pause_button" type="TextureButton" parent="playbackButtons"]
+modulate = Color(1.7, 1.2, 0, 1)
+layout_mode = 2
+focus_neighbor_left = NodePath("../../trackNumbers/track_20_button")
+focus_neighbor_top = NodePath("../stop_button")
+focus_neighbor_right = NodePath("../../trackNumbers/track_16_button")
+focus_neighbor_bottom = NodePath("../seek_backward_button")
+texture_normal = ExtResource("2_jfwso")
+stretch_mode = 3
+
+[node name="seek_backward_button" type="TextureButton" parent="playbackButtons"]
+modulate = Color(1.5, 1.5, 0, 1)
+layout_mode = 2
+focus_neighbor_left = NodePath("../../unknown_button")
+focus_neighbor_top = NodePath("../pause_button")
+focus_neighbor_right = NodePath("../../playbackOptions/cont_repeat/continue_button")
+focus_neighbor_bottom = NodePath("../previous_button")
+texture_normal = ExtResource("2_jfwso")
+stretch_mode = 3
+
+[node name="previous_button" type="TextureButton" parent="playbackButtons"]
+modulate = Color(1.5, 1.5, 0, 1)
+layout_mode = 2
+focus_neighbor_left = NodePath("../../exit_button")
+focus_neighbor_top = NodePath("../seek_backward_button")
+focus_neighbor_right = NodePath("../../playbackOptions/cont_repeat/repeat_button")
+focus_neighbor_bottom = NodePath("../next_button")
+texture_normal = ExtResource("2_jfwso")
+stretch_mode = 3
+
+[node name="playbackIcons" type="VBoxContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 34.0
+offset_top = 24.0
+offset_right = 87.0
+offset_bottom = 475.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 17
+alignment = 1
+
+[node name="next_icon" type="Sprite2D" parent="playbackIcons"]
+texture = ExtResource("14_ftplp")
+centered = false
+
+[node name="seek_forward_icon" type="Sprite2D" parent="playbackIcons"]
+position = Vector2(0, 65)
+texture = ExtResource("15_04n8y")
+centered = false
+
+[node name="play_icon" type="Sprite2D" parent="playbackIcons"]
+position = Vector2(0, 130)
+texture = ExtResource("16_jncu3")
+centered = false
+
+[node name="stop_icon" type="Sprite2D" parent="playbackIcons"]
+position = Vector2(0, 195)
+texture = ExtResource("17_g0l5h")
+centered = false
+
+[node name="pause_icon" type="Sprite2D" parent="playbackIcons"]
+position = Vector2(0, 260)
+texture = ExtResource("18_m0s5g")
+centered = false
+
+[node name="seek_backwards_icon" type="Sprite2D" parent="playbackIcons"]
+position = Vector2(0, 325)
+texture = ExtResource("19_51dsp")
+centered = false
+
+[node name="previous_icon" type="Sprite2D" parent="playbackIcons"]
+position = Vector2(0, 390)
+texture = ExtResource("20_1k77y")
+centered = false
+
+[node name="playbackOptions" type="HBoxContainer" parent="."]
+offset_left = 110.0
+offset_top = 354.0
+offset_right = 435.0
+offset_bottom = 451.0
+theme_override_constants/separation = 24
+
+[node name="cont_repeat" type="VBoxContainer" parent="playbackOptions"]
+layout_mode = 2
+theme_override_constants/separation = 43
+
+[node name="continue_button" type="TextureButton" parent="playbackOptions/cont_repeat"]
+layout_mode = 2
+focus_neighbor_left = NodePath("../../../playbackButtons/seek_backward_button")
+focus_neighbor_right = NodePath("../../shuffle_time/shuffle_button")
+focus_neighbor_bottom = NodePath("../repeat_button")
+texture_normal = ExtResource("4_5lrfy")
+
+[node name="repeat_button" type="TextureButton" parent="playbackOptions/cont_repeat"]
+layout_mode = 2
+focus_neighbor_left = NodePath("../../../playbackButtons/previous_button")
+focus_neighbor_top = NodePath("../continue_button")
+focus_neighbor_right = NodePath("../../shuffle_time/time_button")
+texture_normal = ExtResource("5_43gxe")
+
+[node name="shuffle_time" type="VBoxContainer" parent="playbackOptions"]
+layout_mode = 2
+theme_override_constants/separation = 43
+
+[node name="shuffle_button" type="TextureButton" parent="playbackOptions/shuffle_time"]
+layout_mode = 2
+focus_neighbor_left = NodePath("../../cont_repeat/continue_button")
+focus_neighbor_top = NodePath("../../../trackNumbers/track_16_button")
+focus_neighbor_right = NodePath("../../program/program_button")
+focus_neighbor_bottom = NodePath("../time_button")
+texture_normal = ExtResource("5_evnbg")
+
+[node name="time_button" type="TextureButton" parent="playbackOptions/shuffle_time"]
+layout_mode = 2
+focus_neighbor_left = NodePath("../../cont_repeat/repeat_button")
+focus_neighbor_top = NodePath("../shuffle_button")
+focus_neighbor_right = NodePath("../../../exit_button")
+texture_normal = ExtResource("7_bsh4r")
+
+[node name="program" type="VBoxContainer" parent="playbackOptions"]
+layout_mode = 2
+
+[node name="program_button" type="TextureButton" parent="playbackOptions/program"]
+layout_mode = 2
+focus_neighbor_left = NodePath("../../shuffle_time/shuffle_button")
+focus_neighbor_top = NodePath("../../../trackNumbers/track_17_button")
+focus_neighbor_right = NodePath("../../../unknown_button")
+focus_neighbor_bottom = NodePath("../../../exit_button")
+texture_normal = ExtResource("6_dl6q2")
+
+[node name="exit_button" type="TextureButton" parent="."]
+offset_left = 373.0
+offset_top = 415.0
+offset_right = 591.0
+offset_bottom = 481.0
+focus_neighbor_left = NodePath("../playbackOptions/shuffle_time/time_button")
+focus_neighbor_top = NodePath("../trackNumbers/track_18_button")
+focus_neighbor_right = NodePath("../playbackButtons/previous_button")
+texture_normal = ExtResource("9_5rqtl")
+
+[node name="unknown_button" type="TextureButton" parent="."]
+offset_left = 570.0
+offset_top = 327.0
+offset_right = 623.0
+offset_bottom = 388.0
+focus_neighbor_left = NodePath("../playbackOptions/program/program_button")
+focus_neighbor_top = NodePath("../trackNumbers/track_20_button")
+focus_neighbor_right = NodePath("../playbackButtons/seek_backward_button")
+focus_neighbor_bottom = NodePath("../exit_button")
+texture_normal = ExtResource("2_jfwso")
+
+[node name="trackNumbers" type="GridContainer" parent="."]
+offset_left = 398.0
+offset_top = 124.0
+offset_right = 601.0
+offset_bottom = 300.0
+theme_override_constants/h_separation = 42
+theme_override_constants/v_separation = 48
+columns = 5
+
+[node name="track_01_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
+self_modulate = Color(1.7, 1.2, 0, 1)
+layout_mode = 2
+focus_neighbor_left = NodePath("../../playbackButtons/seek_forward_button")
+texture_normal = ExtResource("13_pq5h4")
+stretch_mode = 3
+
+[node name="track_01_orb" type="Sprite2D" parent="trackNumbers/track_01_button"]
+visible = false
+modulate = Color(1.7, 1.2, 0, 1)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_jfwso")
+
+[node name="track_01_orb_label" type="Label" parent="trackNumbers/track_01_button"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.85714
+anchor_top = -2.25
+anchor_right = 2.85714
+anchor_bottom = 2.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "1"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="track_02_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
+self_modulate = Color(1.7, 1.2, 0, 1)
+layout_mode = 2
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_02_orb" type="Sprite2D" parent="trackNumbers/track_02_button"]
+visible = false
+modulate = Color(1.7, 1.2, 0, 1)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_jfwso")
+
+[node name="track_02_orb_label" type="Label" parent="trackNumbers/track_02_button"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.85714
+anchor_top = -2.25
+anchor_right = 2.85714
+anchor_bottom = 2.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "2"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="track_03_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
+self_modulate = Color(1.5, 1.5, 0, 1)
+layout_mode = 2
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_03_orb" type="Sprite2D" parent="trackNumbers/track_03_button"]
+visible = false
+modulate = Color(1.5, 1.5, 0, 1)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_jfwso")
+
+[node name="track_03_orb_label" type="Label" parent="trackNumbers/track_03_button"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.85714
+anchor_top = -2.25
+anchor_right = 2.85714
+anchor_bottom = 2.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "3"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="track_04_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
+self_modulate = Color(1.5, 1.5, 0, 1)
+layout_mode = 2
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_04_orb" type="Sprite2D" parent="trackNumbers/track_04_button"]
+visible = false
+modulate = Color(1.5, 1.5, 0, 1)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_jfwso")
+
+[node name="track_04_orb_label" type="Label" parent="trackNumbers/track_04_button"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.85714
+anchor_top = -2.25
+anchor_right = 2.85714
+anchor_bottom = 2.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "4"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="track_05_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
+self_modulate = Color(0, 1, 0.270588, 1)
+layout_mode = 2
+focus_neighbor_right = NodePath("../../playbackButtons/seek_forward_button")
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_05_orb" type="Sprite2D" parent="trackNumbers/track_05_button"]
+visible = false
+modulate = Color(0, 1, 0.270588, 1)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_jfwso")
+
+[node name="track_05_orb_label" type="Label" parent="trackNumbers/track_05_button"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.85714
+anchor_top = -2.25
+anchor_right = 2.85714
+anchor_bottom = 2.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "5"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="track_06_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
+self_modulate = Color(1.7, 1.2, 0, 1)
+layout_mode = 2
+focus_neighbor_left = NodePath("../../playbackButtons/play_button")
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_06_orb" type="Sprite2D" parent="trackNumbers/track_06_button"]
+visible = false
+modulate = Color(1.7, 1.2, 0, 1)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_jfwso")
+
+[node name="track_06_orb_label" type="Label" parent="trackNumbers/track_06_button"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.85714
+anchor_top = -2.25
+anchor_right = 2.85714
+anchor_bottom = 2.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "6"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="track_07_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
+self_modulate = Color(1.7, 1.2, 0, 1)
+layout_mode = 2
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_07_orb" type="Sprite2D" parent="trackNumbers/track_07_button"]
+visible = false
+modulate = Color(1.7, 1.2, 0, 1)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_jfwso")
+
+[node name="track_07_orb_label" type="Label" parent="trackNumbers/track_07_button"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.85714
+anchor_top = -2.25
+anchor_right = 2.85714
+anchor_bottom = 2.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "7"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="track_08_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
+self_modulate = Color(1.5, 1.5, 0, 1)
+layout_mode = 2
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_08_orb" type="Sprite2D" parent="trackNumbers/track_08_button"]
+visible = false
+modulate = Color(1.5, 1.5, 0, 1)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_jfwso")
+
+[node name="track_08_orb_label" type="Label" parent="trackNumbers/track_08_button"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.85714
+anchor_top = -2.25
+anchor_right = 2.85714
+anchor_bottom = 2.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "8"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="track_09_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
+self_modulate = Color(0, 1, 0.270588, 1)
+layout_mode = 2
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_09_orb" type="Sprite2D" parent="trackNumbers/track_09_button"]
+visible = false
+modulate = Color(0, 1, 0.270588, 1)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_jfwso")
+
+[node name="track_09_orb_label" type="Label" parent="trackNumbers/track_09_button"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.85714
+anchor_top = -2.25
+anchor_right = 2.85714
+anchor_bottom = 2.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "9"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="track_10_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
+self_modulate = Color(0, 1, 0.270588, 1)
+layout_mode = 2
+focus_neighbor_right = NodePath("../../playbackButtons/play_button")
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_10_orb" type="Sprite2D" parent="trackNumbers/track_10_button"]
+visible = false
+modulate = Color(0, 1, 0.270588, 1)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_jfwso")
+
+[node name="track_10_orb_label" type="Label" parent="trackNumbers/track_10_button"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.85714
+anchor_top = -2.25
+anchor_right = 2.85714
+anchor_bottom = 2.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "10"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="track_11_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
+self_modulate = Color(1, 0, 0, 1)
+layout_mode = 2
+focus_neighbor_left = NodePath("../../playbackButtons/stop_button")
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_11_orb" type="Sprite2D" parent="trackNumbers/track_11_button"]
+visible = false
+modulate = Color(1, 0, 0, 1)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_jfwso")
+
+[node name="track_11_orb_label" type="Label" parent="trackNumbers/track_11_button"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.85714
+anchor_top = -2.25
+anchor_right = 2.85714
+anchor_bottom = 2.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "11"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="track_12_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
+self_modulate = Color(1, 0, 0, 1)
+layout_mode = 2
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_12_orb" type="Sprite2D" parent="trackNumbers/track_12_button"]
+visible = false
+modulate = Color(1, 0, 0, 1)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_jfwso")
+
+[node name="track_12_orb_label" type="Label" parent="trackNumbers/track_12_button"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.85714
+anchor_top = -2.25
+anchor_right = 2.85714
+anchor_bottom = 2.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "12"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="track_13_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
+self_modulate = Color(1.5, 1.5, 0, 1)
+layout_mode = 2
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_13_orb" type="Sprite2D" parent="trackNumbers/track_13_button"]
+visible = false
+modulate = Color(1.5, 1.5, 0, 1)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_jfwso")
+
+[node name="track_13_orb_label" type="Label" parent="trackNumbers/track_13_button"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.85714
+anchor_top = -2.25
+anchor_right = 2.85714
+anchor_bottom = 2.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "13"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="track_14_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
+self_modulate = Color(0, 1, 0.270588, 1)
+layout_mode = 2
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_14_orb" type="Sprite2D" parent="trackNumbers/track_14_button"]
+visible = false
+modulate = Color(0, 1, 0.270588, 1)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_jfwso")
+
+[node name="track_14_orb_label" type="Label" parent="trackNumbers/track_14_button"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.85714
+anchor_top = -2.25
+anchor_right = 2.85714
+anchor_bottom = 2.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "14"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="track_15_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
+layout_mode = 2
+focus_neighbor_right = NodePath("../../playbackButtons/stop_button")
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_15_orb" type="Sprite2D" parent="trackNumbers/track_15_button"]
+visible = false
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_jfwso")
+
+[node name="track_15_orb_label" type="Label" parent="trackNumbers/track_15_button"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.85714
+anchor_top = -2.25
+anchor_right = 2.85714
+anchor_bottom = 2.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "15"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="track_16_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
+self_modulate = Color(1.2, 0, 1, 1)
+layout_mode = 2
+focus_neighbor_left = NodePath("../../playbackButtons/pause_button")
+focus_neighbor_bottom = NodePath("../../playbackOptions/program/program_button")
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_16_orb" type="Sprite2D" parent="trackNumbers/track_16_button"]
+visible = false
+modulate = Color(1.2, 0, 1, 1)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_jfwso")
+
+[node name="track_16_orb_label" type="Label" parent="trackNumbers/track_16_button"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.85714
+anchor_top = -2.25
+anchor_right = 2.85714
+anchor_bottom = 2.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "16"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="track_17_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
+self_modulate = Color(1.2, 0, 1, 1)
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../../playbackOptions/program/program_button")
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_17_orb" type="Sprite2D" parent="trackNumbers/track_17_button"]
+visible = false
+modulate = Color(1.2, 0, 1, 1)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_jfwso")
+
+[node name="track_17_orb_label" type="Label" parent="trackNumbers/track_17_button"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.85714
+anchor_top = -2.25
+anchor_right = 2.85714
+anchor_bottom = 2.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "17"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="track_18_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../../exit_button")
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_18_orb" type="Sprite2D" parent="trackNumbers/track_18_button"]
+visible = false
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_jfwso")
+
+[node name="track_18_orb_label" type="Label" parent="trackNumbers/track_18_button"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.85714
+anchor_top = -2.25
+anchor_right = 2.85714
+anchor_bottom = 2.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "18"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="track_19_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../../exit_button")
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_19_orb" type="Sprite2D" parent="trackNumbers/track_19_button"]
+visible = false
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_jfwso")
+
+[node name="track_19_orb_label" type="Label" parent="trackNumbers/track_19_button"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.85714
+anchor_top = -2.25
+anchor_right = 2.85714
+anchor_bottom = 2.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "19"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="track_20_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
+layout_mode = 2
+focus_neighbor_right = NodePath("../../playbackButtons/pause_button")
+focus_neighbor_bottom = NodePath("../../unknown_button")
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_20_orb" type="Sprite2D" parent="trackNumbers/track_20_button"]
+visible = false
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("2_jfwso")
+
+[node name="track_20_orb_label" type="Label" parent="trackNumbers/track_20_button"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.85714
+anchor_top = -2.25
+anchor_right = 2.85714
+anchor_bottom = 2.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "20"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="cursor" parent="." instance=ExtResource("13_vo2kb")]
+position = Vector2(64, 184)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="current_track_label" type="Label" parent="."]
+offset_left = 108.0
+offset_top = 63.0
+offset_right = 148.0
+offset_bottom = 97.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="time_label" type="Label" parent="."]
+offset_left = 213.0
+offset_top = 63.0
+offset_right = 253.0
+offset_bottom = 97.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "00        00"
+
+[node name="time_remaining_orb" type="Sprite2D" parent="."]
+visible = false
+self_modulate = Color(1.7, 1.2, 0, 1)
+position = Vector2(188.25, 79)
+scale = Vector2(2.35714, 0.75)
+texture = ExtResource("13_pq5h4")
+
+[node name="stateDisplay" type="Sprite2D" parent="."]
+position = Vector2(109, 154)
+texture = ExtResource("22_38nca")
+centered = false
+
+[node name="VisualiserLayer" type="CanvasLayer" parent="."]
+
+[node name="VisualiserRect" type="ColorRect" parent="VisualiserLayer"]
+visible = false
+material = SubResource("ShaderMaterial_k6vvx")
+offset_left = 111.0
+offset_top = 156.0
+offset_right = 350.0
+offset_bottom = 304.0
+
+[connection signal="pressed" from="playbackButtons/next_button" to="." method="_on_next_button_pressed"]
+[connection signal="button_down" from="playbackButtons/seek_forward_button" to="." method="_on_seek_forward_button_button_down"]
+[connection signal="button_up" from="playbackButtons/seek_forward_button" to="." method="_on_seek_forward_button_button_up"]
+[connection signal="pressed" from="playbackButtons/play_button" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="playbackButtons/stop_button" to="." method="_on_stop_button_pressed"]
+[connection signal="pressed" from="playbackButtons/pause_button" to="." method="_on_pause_button_pressed"]
+[connection signal="button_down" from="playbackButtons/seek_backward_button" to="." method="_on_seek_backward_button_button_down"]
+[connection signal="button_up" from="playbackButtons/seek_backward_button" to="." method="_on_seek_backward_button_button_up"]
+[connection signal="pressed" from="playbackButtons/previous_button" to="." method="_on_previous_button_pressed"]
+[connection signal="pressed" from="playbackOptions/cont_repeat/continue_button" to="." method="_on_continue_button_pressed"]
+[connection signal="pressed" from="playbackOptions/cont_repeat/repeat_button" to="." method="_on_repeat_button_pressed"]
+[connection signal="pressed" from="playbackOptions/shuffle_time/shuffle_button" to="." method="_on_shuffle_button_pressed"]
+[connection signal="pressed" from="playbackOptions/shuffle_time/time_button" to="." method="_on_time_button_pressed"]
+[connection signal="pressed" from="exit_button" to="." method="_on_exit_button_pressed"]
+[connection signal="finished" from="AudioStreamPlayer" to="." method="_on_audio_stream_player_finished"]
