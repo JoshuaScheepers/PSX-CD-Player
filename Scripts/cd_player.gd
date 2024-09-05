@@ -19,6 +19,10 @@ var original_order = []
 
 var shuffle = false
 
+enum PlaybackMode { NORMAL, SHUFFLE, PROGRAM }
+var current_playback_mode = PlaybackMode.NORMAL
+var program_list = []
+
 var seeking_forward = false
 var seeking_backward = false
 var seek_speed = 4
@@ -130,13 +134,13 @@ func update_track_visibility():
 
 		if orb:
 			if i < track_files.size():  # Only consider loaded tracks
-				if shuffle:
-					# In shuffle mode:
-					# Show orb if it's the current track or hasn't been played yet
-					orb.visible = (i == original_order.find(track_files[current_track_index])) or (i not in played_tracks)
-				else:
-					# In regular mode, show orbs for current and upcoming tracks
-					orb.visible = i >= current_track_index
+				match current_playback_mode:
+					PlaybackMode.NORMAL:
+						orb.visible = i >= current_track_index
+					PlaybackMode.SHUFFLE:
+						orb.visible = (i == current_track_index) or (i not in played_tracks)
+					PlaybackMode.PROGRAM:
+						orb.visible = i in program_list
 			else:
 				orb.visible = false  # Hide orbs for non-loaded tracks
 
@@ -181,24 +185,36 @@ func update_elapsed_time_label():
 func _on_next_button_pressed():
 	previous_track_index = current_track_index
 
-	if shuffle:
-		var next_track = get_next_shuffle_track()
-		if next_track == -1:
-			print("Shuffle playback finished.")
-			$AudioStreamPlayer.stop()
-			return
-		current_track_index = next_track
-		played_tracks.append(original_order.find(track_files[current_track_index]))
-	else:
-		if current_track_index < (track_files.size()) - 1:
-			current_track_index += 1
-		else:
-			if repeat_mode == RepeatMode.REPEAT_ALL:
-				current_track_index = 0
+	match current_playback_mode:
+		PlaybackMode.NORMAL:
+			if current_track_index < (track_files.size()) - 1:
+				current_track_index += 1
 			else:
-				print("End of track list reached.")
+				if repeat_mode == RepeatMode.REPEAT_ALL:
+					current_track_index = 0
+				else:
+					print("End of track list reached.")
+					$AudioStreamPlayer.stop()
+					return
+		PlaybackMode.SHUFFLE:
+			var next_track = get_next_shuffle_track()
+			if next_track == -1:
+				print("Shuffle playback finished.")
 				$AudioStreamPlayer.stop()
 				return
+			current_track_index = next_track
+			played_tracks.append(current_track_index)
+		PlaybackMode.PROGRAM:
+			var current_program_index = program_list.find(current_track_index)
+			if current_program_index < program_list.size() - 1:
+				current_track_index = program_list[current_program_index + 1]
+			else:
+				if repeat_mode == RepeatMode.REPEAT_ALL:
+					current_track_index = program_list[0]
+				else:
+					print("End of program list reached.")
+					$AudioStreamPlayer.stop()
+					return
 
 	load_track(current_track_index)
 	$AudioStreamPlayer.play()
@@ -209,23 +225,33 @@ func _on_previous_button_pressed():
 	if current_position > 3.0:
 		$AudioStreamPlayer.seek(0)
 	else:
-		if shuffle:
-			if shuffle_history.size() > 1:
-				shuffle_history.pop_back()  # Remove current track
-				current_track_index = shuffle_history.pop_back()  # Get previous track
-				current_shuffle_index = shuffle_order.find(current_track_index)
-			else:
-				print("No previous track in shuffle history.")
-				return
-		else:
-			if current_track_index > 0:
-				current_track_index -= 1
-			else:
-				print("Start of track list reached.")
-				return
-				
-	if shuffle and played_tracks.size() > 0:
-		played_tracks.pop_back()  # Remove the last played track when going back
+		match current_playback_mode:
+			PlaybackMode.NORMAL:
+				if current_track_index > 0:
+					current_track_index -= 1
+				else:
+					print("Start of track list reached.")
+					return
+			PlaybackMode.SHUFFLE:
+				if shuffle_history.size() > 1:
+					shuffle_history.pop_back()  # Remove current track
+					current_track_index = shuffle_history.pop_back()  # Get previous track
+					if played_tracks.size() > 0:
+						played_tracks.pop_back()  # Remove the last played track
+				else:
+					print("No previous track in shuffle history.")
+					return
+			PlaybackMode.PROGRAM:
+				var current_program_index = program_list.find(current_track_index)
+				if current_program_index > 0:
+					current_track_index = program_list[current_program_index - 1]
+				else:
+					print("Start of program list reached.")
+					return
+
+	load_track(current_track_index)
+	$AudioStreamPlayer.play()
+	update_track_visibility()
 
 	load_track(current_track_index)
 	$AudioStreamPlayer.play()
@@ -233,6 +259,12 @@ func _on_previous_button_pressed():
 
 func _on_play_button_pressed():
 	if not $AudioStreamPlayer.is_playing():
+		if current_playback_mode == PlaybackMode.PROGRAM:
+			if program_list.size() > 0:
+				current_track_index = program_list[0]
+			else:
+				print("Program list is empty")
+				return
 		load_track(current_track_index)
 		$AudioStreamPlayer.play()
 
@@ -290,11 +322,8 @@ func _on_audio_stream_player_finished():
 		load_track(finished_track_index)
 		$AudioStreamPlayer.play()
 	else:
-		if shuffle:
-			played_tracks.append(original_order.find(track_files[current_track_index]))
 		_on_next_button_pressed()
 	
-	turn_off_orb_for_finished_track(finished_track_index)
 	update_track_visibility()
 
 func _on_time_button_pressed():
@@ -345,38 +374,43 @@ func _input(_event):
 		$VisualiserLayer/VisualiserRect.visible = !$VisualiserLayer/VisualiserRect.visible
 
 func _on_track_button_pressed(track_number: int):
-	previous_track_index = current_track_index
-	current_track_index = track_number - 1
-
-	if shuffle:
-		# If in shuffle mode, update the shuffle-related variables
-		if current_track_index not in played_tracks:
-			played_tracks.append(current_track_index)
-		shuffle_history.append(current_track_index)
-		current_shuffle_index = shuffle_order.find(current_track_index)
-		if current_shuffle_index == -1:
-			# If the selected track is not in the shuffle order (shouldn't happen normally),
-			# add it to the end of the shuffle order
-			shuffle_order.append(current_track_index)
-			current_shuffle_index = shuffle_order.size() - 1
+	var track_index = track_number - 1
+	
+	if current_playback_mode == PlaybackMode.PROGRAM:
+		add_to_program_list(track_index)
 	else:
-		# In non-shuffle mode, just update the current_track_index (already done above)
-		pass
+		previous_track_index = current_track_index
+		current_track_index = track_index
 
-	load_track(current_track_index)
-	$AudioStreamPlayer.play()
-	update_track_visibility()  # Update orb visibility after changing the track
+		if current_playback_mode == PlaybackMode.SHUFFLE:
+			if current_track_index not in played_tracks:
+				played_tracks.append(current_track_index)
+			shuffle_history.append(current_track_index)
+			current_shuffle_index = shuffle_order.find(current_track_index)
+			if current_shuffle_index == -1:
+				shuffle_order.append(current_track_index)
+				current_shuffle_index = shuffle_order.size() - 1
+
+		load_track(current_track_index)
+		$AudioStreamPlayer.play()
+	
+	update_track_visibility()
 	
 func get_next_shuffle_track() -> int:
 	if played_tracks.size() >= track_files.size():
-		print("All tracks have been played in shuffle mode.")
-		return -1  # Indicate that all tracks have been played
+		if repeat_mode == RepeatMode.REPEAT_ALL:
+			played_tracks.clear()
+			shuffle_order.shuffle()
+			current_shuffle_index = -1
+		else:
+			print("All tracks have been played in shuffle mode.")
+			return -1
 
-	if current_shuffle_index >= shuffle_order.size() - 1:
-		shuffle_order.shuffle()
-		current_shuffle_index = -1
-	
 	current_shuffle_index += 1
+	if current_shuffle_index >= shuffle_order.size():
+		shuffle_order.shuffle()
+		current_shuffle_index = 0
+
 	var next_track = shuffle_order[current_shuffle_index]
 	while next_track in played_tracks:
 		current_shuffle_index += 1
@@ -388,30 +422,61 @@ func get_next_shuffle_track() -> int:
 	shuffle_history.append(next_track)
 	return next_track
 
-func _on_shuffle_button_pressed() -> void:
+func _on_shuffle_button_pressed():
 	shuffle = !shuffle
 	if shuffle:
+		current_playback_mode = PlaybackMode.SHUFFLE
 		shuffle_order = range(track_files.size())
 		shuffle_order.shuffle()
-		played_tracks.clear()  # Clear played tracks when entering shuffle mode
+		played_tracks.clear()
 		shuffle_history.clear()
-		
-		# Choose a random track from the loaded tracks
-		var random_track_index = randi() % track_files.size()
-		current_track_index = random_track_index
-		current_shuffle_index = shuffle_order.find(random_track_index)
-		
+		current_shuffle_index = 0  # Start from the first track in the shuffled order
+		current_track_index = shuffle_order[current_shuffle_index]
 		shuffle_history.append(current_track_index)
-		played_tracks.append(original_order.find(track_files[current_track_index]))  # Mark current track as played
+		played_tracks.append(current_track_index)
 		
-		# Load and play the randomly selected track
-		load_track(current_track_index + 1)
+		# Load and play the first track in the shuffled order
+		load_track(current_track_index)
+		$AudioStreamPlayer.play()
 	else:
+		current_playback_mode = PlaybackMode.NORMAL
 		track_files = original_order.duplicate()
-		played_tracks.clear()  # Clear played tracks when exiting shuffle mode
-		# Optionally, you might want to adjust current_track_index here
-		# to reflect its position in the original order
-		current_track_index = original_order.find(track_files[current_track_index])
+		played_tracks.clear()
+		# Optionally, you can stop playback when exiting shuffle mode
+		# $AudioStreamPlayer.stop()
 	
 	print("Shuffle: ", shuffle)
+	update_track_visibility()
+	
+func add_to_program_list(track_index: int):
+	if track_index not in program_list:
+		program_list.append(track_index)
+		update_track_visibility()
+	print("Program list: ", program_list)
+
+func _on_program_button_pressed():
+	if current_playback_mode != PlaybackMode.PROGRAM:
+		current_playback_mode = PlaybackMode.PROGRAM
+		program_list.clear()
+		update_track_visibility()
+		print("Program mode activated")
+	else:
+		current_playback_mode = PlaybackMode.NORMAL
+		program_list.clear()
+		reset_normal_mode_visibility()
+		print("NORMAL MODE")
+
+func reset_normal_mode_visibility():
+	var track_buttons = get_tree().get_nodes_in_group("track_buttons")
+	for i in range(track_buttons.size()):
+		var track_button = track_buttons[i]
+		var orb_name = "track_%02d_orb" % (i + 1)
+		var orb = track_button.get_node_or_null(orb_name)
+		
+		if orb:
+			if i < track_files.size():
+				orb.visible = i >= current_track_index
+			else:
+				orb.visible = false
+	
 	update_track_visibility()
