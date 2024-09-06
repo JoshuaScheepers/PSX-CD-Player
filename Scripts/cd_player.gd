@@ -58,8 +58,11 @@ func cursor_movement():
 func populate_tracks():
 	track_files.clear()
 	track_durations.clear()
+
+	# External music folder path
 	var external_music_path = OS.get_executable_path().get_base_dir() + "/Music"
 	var external_music_directory = DirAccess.open(external_music_path)
+	
 	if external_music_directory:
 		print("External playlist loaded")
 		external_music_directory.list_dir_begin()
@@ -72,6 +75,7 @@ func populate_tracks():
 			file_name = external_music_directory.get_next()
 		external_music_directory.list_dir_end()
 	else:
+		# Fallback to internal resources (res://)
 		print("Default playlist loaded")
 		var default_tracks = [
 			"res://Music/01 - Opening the Portal.mp3",
@@ -80,8 +84,11 @@ func populate_tracks():
 			"res://Music/04 - Closing The Portal (Avec Batterie).mp3"
 		]
 		for track_path in default_tracks:
-			track_files.append(track_path)
-			track_durations.append(get_track_duration(track_path))
+			if ResourceLoader.exists(track_path):
+				track_files.append(track_path)
+				track_durations.append(get_track_duration(track_path))
+			else:
+				print("Failed to load internal resource: ", track_path)
 
 	setup_tracks_after_loading()
 
@@ -112,15 +119,16 @@ func load_track(track_index: int):
 		print("Failed to load stream for track: ", track_path)
 
 func load_mp3(path: String) -> AudioStream:
-	var file = FileAccess.open(path, FileAccess.READ)
-	if file:
-		var sound = AudioStreamMP3.new()
-		sound.data = file.get_buffer(file.get_length())
-		file.close()
-		return sound
-	else:
-		print("Failed to load MP3: ", path)
-		return null
+	if path.begins_with("res://"):  # Internal resource
+		return ResourceLoader.load(path) as AudioStream
+	else:  # External file
+		var file = FileAccess.open(path, FileAccess.READ)
+		if file:
+			var sound = AudioStreamMP3.new()
+			sound.data = file.get_buffer(file.get_length())
+			file.close()
+			return sound
+	return null
 
 func update_track_visibility():
 	var track_buttons = get_tree().get_nodes_in_group("track_buttons")
@@ -253,10 +261,6 @@ func _on_previous_button_pressed():
 	$AudioStreamPlayer.play()
 	update_track_visibility()
 
-	load_track(current_track_index)
-	$AudioStreamPlayer.play()
-	update_track_visibility()
-
 func _on_play_button_pressed():
 	if not $AudioStreamPlayer.is_playing():
 		if current_playback_mode == PlaybackMode.PROGRAM:
@@ -357,14 +361,16 @@ func get_track_duration(path: String) -> float:
 	return -1
 
 func _on_continue_button_pressed():
+	current_playback_mode = PlaybackMode.NORMAL
 	repeat_mode = RepeatMode.NO_REPEAT
-
+	
 	var currently_playing_track = track_files[current_track_index]
 	current_track_index = original_order.find(currently_playing_track)
 
 	track_files = original_order.duplicate()
 
 	update_elapsed_time_label()
+	update_track_visibility()
 
 func _on_exit_button_pressed():
 	get_tree().quit()
