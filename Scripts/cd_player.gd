@@ -308,12 +308,12 @@ func turn_off_orb_for_finished_track(track_index):
 	var node_path = "trackNumbers/track_%02d_button/track_%02d_orb" % [track_index + 1, track_index + 1]
 	var orb = get_node_or_null(node_path)
 	if orb: orb.visible = false
-	
+
 func turn_on_orb_for_previous_track(track_index):
 	var node_path = "trackNumbers/track_%02d_button/track_%02d_orb" % [track_index + 1, track_index + 1]
 	var orb = get_node_or_null(node_path)
 	if orb: orb.visible = true
-	
+
 func turn_on_orb_for_current_track(track_index):
 	var node_path = "trackNumbers/track_%02d_button/track_%02d_orb" % [track_index + 1, track_index + 1]
 	var orb = get_node_or_null(node_path)
@@ -382,26 +382,15 @@ func _input(_event):
 func _on_track_button_pressed(track_number: int):
 	var track_index = track_number - 1
 	
-	if current_playback_mode == PlaybackMode.PROGRAM:
-		add_to_program_list(track_index)
-	else:
-		previous_track_index = current_track_index
+	# Check if the track index is valid and a track is loaded at this index
+	if track_index < track_files.size():
 		current_track_index = track_index
-
-		if current_playback_mode == PlaybackMode.SHUFFLE:
-			if current_track_index not in played_tracks:
-				played_tracks.append(current_track_index)
-			shuffle_history.append(current_track_index)
-			current_shuffle_index = shuffle_order.find(current_track_index)
-			if current_shuffle_index == -1:
-				shuffle_order.append(current_track_index)
-				current_shuffle_index = shuffle_order.size() - 1
-
 		load_track(current_track_index)
 		$AudioStreamPlayer.play()
-	
-	update_track_visibility()
-	
+		update_track_visibility()
+	else:
+		print("No track loaded at this position.")
+
 func get_next_shuffle_track() -> int:
 	if played_tracks.size() >= track_files.size():
 		if repeat_mode == RepeatMode.REPEAT_ALL:
@@ -453,7 +442,7 @@ func _on_shuffle_button_pressed():
 	
 	print("Shuffle: ", shuffle)
 	update_track_visibility()
-	
+
 func add_to_program_list(track_index: int):
 	if track_index not in program_list:
 		program_list.append(track_index)
