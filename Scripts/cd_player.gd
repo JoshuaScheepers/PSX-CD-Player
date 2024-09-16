@@ -51,15 +51,28 @@ func assign_tracks():
 		button.connect("pressed", callable)
 		button_index += 1
 
+func get_application_base_dir() -> String:
+	var base_dir = ""
+	if OS.get_name() == "macOS":
+		# On macOS, navigate out of the .app bundle to get the directory containing it
+		var executable_path = OS.get_executable_path()
+		base_dir = executable_path.get_base_dir().get_base_dir().get_base_dir().get_base_dir()
+	else:
+		# For Windows and Linux, use executable's base directory
+		base_dir = OS.get_executable_path().get_base_dir()
+	print(OS.get_name())
+	return base_dir
+
 func populate_tracks():
 	track_files.clear()
 
-	# External music folder path
-	var external_music_path = OS.get_executable_path().get_base_dir() + "/Music"
+	var base_dir = get_application_base_dir()
+	var external_music_path = base_dir + "/Music"
+
 	var external_music_directory = DirAccess.open(external_music_path)
 	
 	if external_music_directory:
-		print("External playlist loaded")
+		print("External playlist loaded from ", external_music_path)
 		external_music_directory.list_dir_begin()
 		var file_name = external_music_directory.get_next()
 		while file_name != "":
@@ -71,6 +84,8 @@ func populate_tracks():
 	else:
 		# Fallback to internal resources (res://)
 		print("Default playlist loaded")
+		setup_tracks_after_loading()
+
 		var default_tracks = [
 			"res://Music/01 - Opening the Portal.mp3",
 			"res://Music/02 - Liminal Phasing.mp3",
