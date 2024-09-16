@@ -235,7 +235,7 @@ func _on_pause_button_pressed():
 
 func _on_stop_button_pressed():
 	$AudioStreamPlayer.stop()
-	$time_label.text = "00      00"
+	$time_label.text = "00        00"
 
 func _on_next_button_pressed():
 	match current_playback_mode:
