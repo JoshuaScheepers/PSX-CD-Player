@@ -20,13 +20,13 @@ var current_shuffle_index = -1
 var program_list = []
 var current_program_position = 0  # New variable to track position in program_list
 
-# Time Display
-enum TimeMode { ELAPSED, REMAINING_TRACK, REMAINING_TOTAL }
-var time_mode := TimeMode.ELAPSED
-
 # Repeat Mode
 enum RepeatMode { NO_REPEAT, REPEAT_ONE, REPEAT_ALL }
 var repeat_mode := RepeatMode.NO_REPEAT
+
+# Time Display
+enum TimeMode { ELAPSED, REMAINING_TRACK, REMAINING_TOTAL }
+var time_mode := TimeMode.ELAPSED
 
 # Seeking
 var seeking_forward = false
@@ -87,10 +87,10 @@ func populate_tracks():
 		setup_tracks_after_loading()
 
 		var default_tracks = [
-			"res://Music/01 - Opening the Portal.mp3",
-			"res://Music/02 - Liminal Phasing.mp3",
-			"res://Music/03 - Megadalene.mp3",
-			"res://Music/04 - Closing The Portal (Avec Batterie).mp3"
+			"res://Music/track_01.mp3",
+			"res://Music/track_02.mp3",
+			"res://Music/track_03.mp3",
+			"res://Music/track_04.mp3"
 		]
 		for track_path in default_tracks:
 			if ResourceLoader.exists(track_path):
@@ -116,23 +116,36 @@ func calculate_track_durations():
 			track_durations.append(0)
 
 func _physics_process(delta):
+	playback_mode_display()
 	cursor_movement()
+	shader_daemon(delta)
+	seek_function(delta)
 
-	if $AudioStreamPlayer.is_playing():
-		shader_time += delta
-		update_elapsed_time_label()
-		if $VisualiserLayer/VisualiserRect.visible:
-			$VisualiserLayer/VisualiserRect.material.set_shader_parameter("iTime", shader_time)
-
-	if seeking_forward:
-		$AudioStreamPlayer.seek($AudioStreamPlayer.get_playback_position() + delta * seek_speed)
-	elif seeking_backward:
-		$AudioStreamPlayer.seek($AudioStreamPlayer.get_playback_position() - delta * seek_speed)
+func playback_mode_display():
+	if current_playback_mode == PlaybackMode.NORMAL:
+		$current_playback_sprite.texture = load("res://Assets/continue_button_no_bg.png")
+	if current_playback_mode == PlaybackMode.SHUFFLE:
+		$current_playback_sprite.texture = load("res://Assets/shuffle_button_no_bg.png")
+	if current_playback_mode == PlaybackMode.PROGRAM:
+		$current_playback_sprite.texture = load("res://Assets/program_button_no_bg.png")
 
 func cursor_movement():
 	var focused_node = get_viewport().gui_get_focus_owner()
 	if focused_node:
 		$cursor.global_position = focused_node.global_position + (focused_node.size * 0.5)
+
+func shader_daemon(delta):
+	if $AudioStreamPlayer.is_playing():
+		shader_time += delta
+		update_elapsed_time_label()
+	if $VisualiserLayer/VisualiserRect.visible:
+			$VisualiserLayer/VisualiserRect.material.set_shader_parameter("iTime", shader_time)
+
+func seek_function(delta):
+	if seeking_forward:
+		$AudioStreamPlayer.seek($AudioStreamPlayer.get_playback_position() + delta * seek_speed)
+	elif seeking_backward:
+		$AudioStreamPlayer.seek($AudioStreamPlayer.get_playback_position() - delta * seek_speed)
 
 func load_track(track_index: int):
 	if current_playback_mode == PlaybackMode.PROGRAM:
@@ -359,10 +372,13 @@ func _on_repeat_button_pressed():
 func update_repeat_label():
 	match repeat_mode:
 		RepeatMode.NO_REPEAT:
+			$repeat_mode_sprite.visible = false
 			print("NO REPEAT")
 		RepeatMode.REPEAT_ONE:
+			$repeat_mode_sprite.visible = true
 			print("REPEAT ONE")
 		RepeatMode.REPEAT_ALL:
+			$repeat_mode_sprite.visible = true
 			print("REPEAT ALL")
 
 func get_total_remaining_time() -> float:

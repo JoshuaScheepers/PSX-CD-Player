@@ -27,6 +27,7 @@ window/size/viewport_width=640
 window/size/viewport_height=508
 window/size/resizable=false
 window/stretch/mode="canvas_items"
+window/vsync/vsync_mode=2
 
 [filesystem]
 

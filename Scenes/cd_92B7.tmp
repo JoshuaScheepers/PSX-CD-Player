@@ -1,0 +1,290 @@
+[gd_scene load_steps=14 format=3 uid="uid://dm6rdy4gw7uf2"]
+
+[ext_resource type="Script" path="res://Scripts/cd_player.gd" id="1_fjt1b"]
+[ext_resource type="Texture2D" uid="uid://cbb2b8cw88ito" path="res://Assets/bg.png" id="1_o7ebn"]
+[ext_resource type="Texture2D" uid="uid://dbwlq1qkml7pt" path="res://Assets/CD_PLAYER_logo_bg.png" id="2_crd55"]
+[ext_resource type="Texture2D" uid="uid://nfuliodjlti1" path="res://Assets/original_image.png" id="2_crlpl"]
+[ext_resource type="Texture2D" uid="uid://dcfkhgi70rhum" path="res://Assets/button_orb.png" id="2_jfwso"]
+[ext_resource type="Texture2D" uid="uid://dh654ux5wjyx3" path="res://Assets/continue_button.png" id="4_5lrfy"]
+[ext_resource type="Texture2D" uid="uid://ldtux42xd53p" path="res://Assets/repeat_button.png" id="5_43gxe"]
+[ext_resource type="Texture2D" uid="uid://bxdxhiajve7t6" path="res://Assets/shuffle_button.png" id="5_evnbg"]
+[ext_resource type="Texture2D" uid="uid://cwfkwpplw5fdp" path="res://Assets/program_button.png" id="6_dl6q2"]
+[ext_resource type="Texture2D" uid="uid://bdte3k0ue8y7n" path="res://Assets/time_button.png" id="7_bsh4r"]
+[ext_resource type="Texture2D" uid="uid://cax5hq7bo8oxp" path="res://Assets/exit_button.png" id="9_5rqtl"]
+[ext_resource type="Texture2D" uid="uid://d0rnd2no2rpuv" path="res://Assets/button_orb_small.png" id="13_pq5h4"]
+[ext_resource type="PackedScene" uid="uid://cfqwv5ewenchu" path="res://Scenes/cursor.tscn" id="13_vo2kb"]
+
+[node name="CD_Player" type="Node2D"]
+script = ExtResource("1_fjt1b")
+
+[node name="background" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("1_o7ebn")
+centered = false
+
+[node name="CD_PLAYER_logo" type="Sprite2D" parent="."]
+position = Vector2(539.5, 47.5)
+texture = ExtResource("2_crd55")
+
+[node name="original_image_reference" type="Sprite2D" parent="."]
+visible = false
+texture = ExtResource("2_crlpl")
+centered = false
+
+[node name="playbackButtons" type="VBoxContainer" parent="."]
+offset_left = 32.0
+offset_top = 22.0
+offset_right = 85.0
+offset_bottom = 473.0
+
+[node name="next_button" type="TextureButton" parent="playbackButtons"]
+modulate = Color(0, 1, 0.270588, 1)
+self_modulate = Color(1.5, 1.5, 1.5, 1)
+layout_mode = 2
+focus_neighbor_left = NodePath("../../trackNumbers/track_05_button")
+focus_neighbor_top = NodePath("../previous_button")
+focus_neighbor_right = NodePath("../../trackNumbers/track_01_button")
+focus_neighbor_bottom = NodePath("../seek_forward_button")
+texture_normal = ExtResource("2_jfwso")
+
+[node name="seek_forward_button" type="TextureButton" parent="playbackButtons"]
+modulate = Color(0, 1, 0.270588, 1)
+self_modulate = Color(1.5, 1.5, 1.5, 1)
+layout_mode = 2
+focus_neighbor_left = NodePath("../../trackNumbers/track_05_button")
+focus_neighbor_top = NodePath("../next_button")
+focus_neighbor_right = NodePath("../../trackNumbers/track_01_button")
+focus_neighbor_bottom = NodePath("../play_button")
+texture_normal = ExtResource("2_jfwso")
+
+[node name="play_button" type="TextureButton" parent="playbackButtons"]
+layout_mode = 2
+focus_neighbor_left = NodePath("../../trackNumbers/track_10_button")
+focus_neighbor_top = NodePath("../seek_forward_button")
+focus_neighbor_right = NodePath("../../trackNumbers/track_06_button")
+focus_neighbor_bottom = NodePath("../stop_button")
+texture_normal = ExtResource("2_jfwso")
+
+[node name="stop_button" type="TextureButton" parent="playbackButtons"]
+modulate = Color(1, 0, 0, 1)
+self_modulate = Color(1.5, 1, 1, 1)
+layout_mode = 2
+focus_neighbor_left = NodePath("../../trackNumbers/track_15_button")
+focus_neighbor_top = NodePath("../play_button")
+focus_neighbor_right = NodePath("../../trackNumbers/track_11_button")
+focus_neighbor_bottom = NodePath("../pause_button")
+texture_normal = ExtResource("2_jfwso")
+
+[node name="pause_button" type="TextureButton" parent="playbackButtons"]
+modulate = Color(1.7, 1.2, 0, 1)
+layout_mode = 2
+focus_neighbor_left = NodePath("../../trackNumbers/track_20_button")
+focus_neighbor_top = NodePath("../stop_button")
+focus_neighbor_right = NodePath("../../trackNumbers/track_16_button")
+focus_neighbor_bottom = NodePath("../seek_backward_button")
+texture_normal = ExtResource("2_jfwso")
+
+[node name="seek_backward_button" type="TextureButton" parent="playbackButtons"]
+modulate = Color(1.5, 1.5, 0, 1)
+layout_mode = 2
+focus_neighbor_left = NodePath("../../unknown_button")
+focus_neighbor_top = NodePath("../pause_button")
+focus_neighbor_right = NodePath("../../playbackOptions/cont_repeat/continue_button")
+focus_neighbor_bottom = NodePath("../previous_button")
+texture_normal = ExtResource("2_jfwso")
+
+[node name="previous_button" type="TextureButton" parent="playbackButtons"]
+modulate = Color(1.5, 1.5, 0, 1)
+layout_mode = 2
+focus_neighbor_left = NodePath("../../exit_button")
+focus_neighbor_top = NodePath("../seek_backward_button")
+focus_neighbor_right = NodePath("../../playbackOptions/cont_repeat/repeat_button")
+focus_neighbor_bottom = NodePath("../next_button")
+texture_normal = ExtResource("2_jfwso")
+
+[node name="playbackOptions" type="HBoxContainer" parent="."]
+offset_left = 110.0
+offset_top = 354.0
+offset_right = 435.0
+offset_bottom = 451.0
+theme_override_constants/separation = 24
+
+[node name="cont_repeat" type="VBoxContainer" parent="playbackOptions"]
+layout_mode = 2
+theme_override_constants/separation = 43
+
+[node name="continue_button" type="TextureButton" parent="playbackOptions/cont_repeat"]
+layout_mode = 2
+focus_neighbor_left = NodePath("../../../playbackButtons/seek_backward_button")
+focus_neighbor_right = NodePath("../../shuffle_time/shuffle_button")
+focus_neighbor_bottom = NodePath("../repeat_button")
+texture_normal = ExtResource("4_5lrfy")
+
+[node name="repeat_button" type="TextureButton" parent="playbackOptions/cont_repeat"]
+layout_mode = 2
+focus_neighbor_left = NodePath("../../../playbackButtons/previous_button")
+focus_neighbor_top = NodePath("../continue_button")
+focus_neighbor_right = NodePath("../../shuffle_time/time_button")
+texture_normal = ExtResource("5_43gxe")
+
+[node name="shuffle_time" type="VBoxContainer" parent="playbackOptions"]
+layout_mode = 2
+theme_override_constants/separation = 43
+
+[node name="shuffle_button" type="TextureButton" parent="playbackOptions/shuffle_time"]
+layout_mode = 2
+focus_neighbor_left = NodePath("../../cont_repeat/continue_button")
+focus_neighbor_top = NodePath("../../../trackNumbers/track_16_button")
+focus_neighbor_right = NodePath("../../program/program_button")
+focus_neighbor_bottom = NodePath("../time_button")
+texture_normal = ExtResource("5_evnbg")
+
+[node name="time_button" type="TextureButton" parent="playbackOptions/shuffle_time"]
+layout_mode = 2
+focus_neighbor_left = NodePath("../../cont_repeat/repeat_button")
+focus_neighbor_top = NodePath("../shuffle_button")
+focus_neighbor_right = NodePath("../../../exit_button")
+texture_normal = ExtResource("7_bsh4r")
+
+[node name="program" type="VBoxContainer" parent="playbackOptions"]
+layout_mode = 2
+
+[node name="program_button" type="TextureButton" parent="playbackOptions/program"]
+layout_mode = 2
+focus_neighbor_left = NodePath("../../shuffle_time/shuffle_button")
+focus_neighbor_top = NodePath("../../../trackNumbers/track_17_button")
+focus_neighbor_right = NodePath("../../../unknown_button")
+focus_neighbor_bottom = NodePath("../../../exit_button")
+texture_normal = ExtResource("6_dl6q2")
+
+[node name="exit_button" type="TextureButton" parent="."]
+offset_left = 373.0
+offset_top = 415.0
+offset_right = 591.0
+offset_bottom = 481.0
+focus_neighbor_left = NodePath("../playbackOptions/shuffle_time/time_button")
+focus_neighbor_top = NodePath("../trackNumbers/track_18_button")
+focus_neighbor_right = NodePath("../playbackButtons/previous_button")
+texture_normal = ExtResource("9_5rqtl")
+
+[node name="unknown_button" type="TextureButton" parent="."]
+offset_left = 570.0
+offset_top = 327.0
+offset_right = 623.0
+offset_bottom = 388.0
+focus_neighbor_left = NodePath("../playbackOptions/program/program_button")
+focus_neighbor_top = NodePath("../trackNumbers/track_20_button")
+focus_neighbor_right = NodePath("../playbackButtons/seek_backward_button")
+focus_neighbor_bottom = NodePath("../exit_button")
+texture_normal = ExtResource("2_jfwso")
+
+[node name="trackNumbers" type="GridContainer" parent="."]
+offset_left = 398.0
+offset_top = 124.0
+offset_right = 601.0
+offset_bottom = 300.0
+theme_override_constants/h_separation = 42
+theme_override_constants/v_separation = 48
+columns = 5
+
+[node name="track_01_button" type="TextureButton" parent="trackNumbers"]
+layout_mode = 2
+focus_neighbor_left = NodePath("../../playbackButtons/seek_forward_button")
+disabled = true
+texture_normal = ExtResource("13_pq5h4")
+stretch_mode = 3
+
+[node name="track_02_button" type="TextureButton" parent="trackNumbers"]
+layout_mode = 2
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_03_button" type="TextureButton" parent="trackNumbers"]
+layout_mode = 2
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_04_button" type="TextureButton" parent="trackNumbers"]
+layout_mode = 2
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_05_button" type="TextureButton" parent="trackNumbers"]
+layout_mode = 2
+focus_neighbor_right = NodePath("../../playbackButtons/seek_forward_button")
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_06_button" type="TextureButton" parent="trackNumbers"]
+layout_mode = 2
+focus_neighbor_left = NodePath("../../playbackButtons/play_button")
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_07_button" type="TextureButton" parent="trackNumbers"]
+layout_mode = 2
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_08_button" type="TextureButton" parent="trackNumbers"]
+layout_mode = 2
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_09_button" type="TextureButton" parent="trackNumbers"]
+layout_mode = 2
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_10_button" type="TextureButton" parent="trackNumbers"]
+layout_mode = 2
+focus_neighbor_right = NodePath("../../playbackButtons/play_button")
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_11_button" type="TextureButton" parent="trackNumbers"]
+layout_mode = 2
+focus_neighbor_left = NodePath("../../playbackButtons/stop_button")
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_12_button" type="TextureButton" parent="trackNumbers"]
+layout_mode = 2
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_13_button" type="TextureButton" parent="trackNumbers"]
+layout_mode = 2
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_14_button" type="TextureButton" parent="trackNumbers"]
+layout_mode = 2
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_15_button" type="TextureButton" parent="trackNumbers"]
+layout_mode = 2
+focus_neighbor_right = NodePath("../../playbackButtons/stop_button")
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_16_button" type="TextureButton" parent="trackNumbers"]
+layout_mode = 2
+focus_neighbor_left = NodePath("../../playbackButtons/pause_button")
+focus_neighbor_bottom = NodePath("../../playbackOptions/program/program_button")
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_17_button" type="TextureButton" parent="trackNumbers"]
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../../playbackOptions/program/program_button")
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_18_button" type="TextureButton" parent="trackNumbers"]
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../../exit_button")
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_19_button" type="TextureButton" parent="trackNumbers"]
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../../exit_button")
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="track_20_button" type="TextureButton" parent="trackNumbers"]
+layout_mode = 2
+focus_neighbor_right = NodePath("../../playbackButtons/pause_button")
+focus_neighbor_bottom = NodePath("../../unknown_button")
+texture_normal = ExtResource("13_pq5h4")
+
+[node name="cursor" parent="." instance=ExtResource("13_vo2kb")]
+position = Vector2(64, 184)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[connection signal="pressed" from="exit_button" to="." method="_on_exit_button_pressed"]
