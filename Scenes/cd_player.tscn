@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://dm6rdy4gw7uf2"]
+[gd_scene load_steps=33 format=3 uid="uid://dm6rdy4gw7uf2"]
 
 [ext_resource type="Script" path="res://Scripts/cd_player.gd" id="1_fjt1b"]
 [ext_resource type="Texture2D" uid="uid://cbb2b8cw88ito" path="res://Assets/bg.png" id="1_o7ebn"]
@@ -25,6 +25,9 @@
 [ext_resource type="Texture2D" uid="uid://b5cuhn27l6rfy" path="res://Assets/continue_button_no_bg.png" id="23_83w2l"]
 [ext_resource type="Texture2D" uid="uid://caiiuiphi8qam" path="res://Assets/repeat_button_no_bg.png" id="23_m3r4m"]
 [ext_resource type="Shader" path="res://Shaders/visualiser.gdshader" id="23_mj4pq"]
+[ext_resource type="Shader" path="res://Shaders/stars_02.gdshader" id="25_sxm2b"]
+[ext_resource type="Shader" path="res://Shaders/spectrum_analyzer.gdshader" id="26_xmk1e"]
+[ext_resource type="Script" path="res://Scripts/shaders.gd" id="27_au2s5"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_x8us2"]
 shader = ExtResource("2_8buio")
@@ -50,6 +53,57 @@ shader_parameter/clip_warp = true
 shader_parameter/vignette_intensity = 0.235
 shader_parameter/vignette_opacity = 0.69
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c4hre"]
+shader = ExtResource("25_sxm2b")
+shader_parameter/zoom = 1.0
+shader_parameter/NUM_LAYERS = 7.0
+shader_parameter/brightness1 = 1.0
+shader_parameter/brightness2 = 0.5
+shader_parameter/brightness3 = 0.5
+shader_parameter/twinkle = 1.0
+shader_parameter/star_rays = 1.0
+shader_parameter/speed = 1.0
+shader_parameter/color1 = Vector3(0.498, 0.588, 1.128)
+shader_parameter/color2 = Vector3(0.303, 0.388, 0.273)
+shader_parameter/color3 = Vector3(1.763, 0.938, 0.787)
+shader_parameter/color4 = Vector3(-2.982, 1.818, 1.948)
+shader_parameter/adjust_queue = Vector2(123.34, 456.821)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2ily8"]
+shader = ExtResource("26_xmk1e")
+shader_parameter/hz0 = null
+shader_parameter/hz1 = null
+shader_parameter/hz2 = null
+shader_parameter/hz3 = null
+shader_parameter/hz4 = null
+shader_parameter/hz5 = null
+shader_parameter/hz6 = null
+shader_parameter/hz7 = null
+shader_parameter/hz8 = null
+shader_parameter/hz9 = null
+shader_parameter/hz10 = null
+shader_parameter/hz11 = null
+shader_parameter/hz12 = null
+shader_parameter/hz13 = null
+shader_parameter/hz14 = null
+shader_parameter/hz15 = null
+shader_parameter/hz16 = null
+shader_parameter/hz17 = null
+shader_parameter/hz18 = null
+shader_parameter/hz19 = null
+shader_parameter/hz20 = null
+shader_parameter/hz21 = null
+shader_parameter/hz22 = null
+shader_parameter/hz23 = null
+shader_parameter/hz24 = null
+shader_parameter/hz25 = null
+shader_parameter/hz26 = null
+shader_parameter/hz27 = null
+shader_parameter/hz28 = null
+shader_parameter/hz29 = null
+shader_parameter/hz30 = null
+shader_parameter/hz31 = null
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_k6vvx"]
 shader = ExtResource("23_mj4pq")
 shader_parameter/is_card = true
@@ -60,9 +114,9 @@ shader_parameter/iChannelResolution1 = Vector2(0, 0)
 script = ExtResource("1_fjt1b")
 
 [node name="CRT" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="VHS" type="ColorRect" parent="CRT"]
+visible = false
 material = SubResource("ShaderMaterial_x8us2")
 anchors_preset = 15
 anchor_right = 1.0
@@ -301,9 +355,9 @@ texture_normal = ExtResource("2_jfwso")
 
 [node name="trackNumbers" type="GridContainer" parent="."]
 offset_left = 398.0
-offset_top = 124.0
+offset_top = 118.0
 offset_right = 601.0
-offset_bottom = 300.0
+offset_bottom = 294.0
 theme_override_constants/h_separation = 42
 theme_override_constants/v_separation = 48
 columns = 5
@@ -316,21 +370,21 @@ texture_normal = ExtResource("13_pq5h4")
 stretch_mode = 3
 
 [node name="track_01_orb" type="Sprite2D" parent="trackNumbers/track_01_button"]
-visible = false
 modulate = Color(1.7, 1.2, 0, 1)
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("2_jfwso")
 
 [node name="track_01_orb_label" type="Label" parent="trackNumbers/track_01_button"]
-visible = false
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -2.85714
-anchor_top = -2.25
-anchor_right = 2.85714
-anchor_bottom = 2.0
-offset_top = 1.0
-offset_bottom = 1.0
+anchor_left = -2.71428
+anchor_top = -1.25
+anchor_right = 3.0
+anchor_bottom = 3.0
+offset_left = -1.0
+offset_top = -8.0
+offset_right = -1.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -341,7 +395,6 @@ theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 24
 text = "1"
 horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="track_02_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
 self_modulate = Color(1.7, 1.2, 0, 1)
@@ -349,21 +402,21 @@ layout_mode = 2
 texture_normal = ExtResource("13_pq5h4")
 
 [node name="track_02_orb" type="Sprite2D" parent="trackNumbers/track_02_button"]
-visible = false
 modulate = Color(1.7, 1.2, 0, 1)
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("2_jfwso")
 
 [node name="track_02_orb_label" type="Label" parent="trackNumbers/track_02_button"]
-visible = false
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -2.85714
-anchor_top = -2.25
-anchor_right = 2.85714
-anchor_bottom = 2.0
-offset_top = 1.0
-offset_bottom = 1.0
+anchor_left = -2.71428
+anchor_top = -1.25
+anchor_right = 3.0
+anchor_bottom = 3.0
+offset_left = -1.0
+offset_top = -8.0
+offset_right = -1.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -374,7 +427,6 @@ theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 24
 text = "2"
 horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="track_03_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
 self_modulate = Color(1.5, 1.5, 0, 1)
@@ -382,21 +434,21 @@ layout_mode = 2
 texture_normal = ExtResource("13_pq5h4")
 
 [node name="track_03_orb" type="Sprite2D" parent="trackNumbers/track_03_button"]
-visible = false
 modulate = Color(1.5, 1.5, 0, 1)
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("2_jfwso")
 
 [node name="track_03_orb_label" type="Label" parent="trackNumbers/track_03_button"]
-visible = false
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -2.85714
-anchor_top = -2.25
-anchor_right = 2.85714
-anchor_bottom = 2.0
-offset_top = 1.0
-offset_bottom = 1.0
+anchor_left = -2.71428
+anchor_top = -1.25
+anchor_right = 3.0
+anchor_bottom = 3.0
+offset_left = -0.999994
+offset_top = -8.0
+offset_right = -0.999992
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -407,7 +459,6 @@ theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 24
 text = "3"
 horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="track_04_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
 self_modulate = Color(1.5, 1.5, 0, 1)
@@ -415,21 +466,21 @@ layout_mode = 2
 texture_normal = ExtResource("13_pq5h4")
 
 [node name="track_04_orb" type="Sprite2D" parent="trackNumbers/track_04_button"]
-visible = false
 modulate = Color(1.5, 1.5, 0, 1)
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("2_jfwso")
 
 [node name="track_04_orb_label" type="Label" parent="trackNumbers/track_04_button"]
-visible = false
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -2.85714
-anchor_top = -2.25
-anchor_right = 2.85714
-anchor_bottom = 2.0
-offset_top = 1.0
-offset_bottom = 1.0
+anchor_left = -2.71428
+anchor_top = -1.25
+anchor_right = 3.0
+anchor_bottom = 3.0
+offset_left = -0.999994
+offset_top = -7.0
+offset_right = -0.999992
+offset_bottom = -7.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -440,7 +491,6 @@ theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 24
 text = "4"
 horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="track_05_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
 self_modulate = Color(0, 1, 0.270588, 1)
@@ -449,21 +499,21 @@ focus_neighbor_right = NodePath("../../playbackButtons/seek_forward_button")
 texture_normal = ExtResource("13_pq5h4")
 
 [node name="track_05_orb" type="Sprite2D" parent="trackNumbers/track_05_button"]
-visible = false
 modulate = Color(0, 1, 0.270588, 1)
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("2_jfwso")
 
 [node name="track_05_orb_label" type="Label" parent="trackNumbers/track_05_button"]
-visible = false
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -2.85714
-anchor_top = -2.25
-anchor_right = 2.85714
-anchor_bottom = 2.0
-offset_top = 1.0
-offset_bottom = 1.0
+anchor_left = -2.71428
+anchor_top = -1.25
+anchor_right = 3.0
+anchor_bottom = 3.0
+offset_left = -0.999994
+offset_top = -8.0
+offset_right = -0.999992
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -474,7 +524,6 @@ theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 24
 text = "5"
 horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="track_06_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
 self_modulate = Color(1.7, 1.2, 0, 1)
@@ -483,21 +532,21 @@ focus_neighbor_left = NodePath("../../playbackButtons/play_button")
 texture_normal = ExtResource("13_pq5h4")
 
 [node name="track_06_orb" type="Sprite2D" parent="trackNumbers/track_06_button"]
-visible = false
 modulate = Color(1.7, 1.2, 0, 1)
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("2_jfwso")
 
 [node name="track_06_orb_label" type="Label" parent="trackNumbers/track_06_button"]
-visible = false
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -2.85714
-anchor_top = -2.25
-anchor_right = 2.85714
-anchor_bottom = 2.0
-offset_top = 1.0
-offset_bottom = 1.0
+anchor_left = -2.71428
+anchor_top = -1.25
+anchor_right = 3.0
+anchor_bottom = 3.0
+offset_left = -1.0
+offset_top = -8.0
+offset_right = -1.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -508,7 +557,6 @@ theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 24
 text = "6"
 horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="track_07_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
 self_modulate = Color(1.7, 1.2, 0, 1)
@@ -516,21 +564,21 @@ layout_mode = 2
 texture_normal = ExtResource("13_pq5h4")
 
 [node name="track_07_orb" type="Sprite2D" parent="trackNumbers/track_07_button"]
-visible = false
 modulate = Color(1.7, 1.2, 0, 1)
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("2_jfwso")
 
 [node name="track_07_orb_label" type="Label" parent="trackNumbers/track_07_button"]
-visible = false
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -2.85714
-anchor_top = -2.25
-anchor_right = 2.85714
-anchor_bottom = 2.0
-offset_top = 1.0
-offset_bottom = 1.0
+anchor_left = -2.71428
+anchor_top = -1.25
+anchor_right = 3.0
+anchor_bottom = 3.0
+offset_left = -1.0
+offset_top = -8.0
+offset_right = -1.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -541,7 +589,6 @@ theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 24
 text = "7"
 horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="track_08_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
 self_modulate = Color(1.5, 1.5, 0, 1)
@@ -549,21 +596,21 @@ layout_mode = 2
 texture_normal = ExtResource("13_pq5h4")
 
 [node name="track_08_orb" type="Sprite2D" parent="trackNumbers/track_08_button"]
-visible = false
 modulate = Color(1.5, 1.5, 0, 1)
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("2_jfwso")
 
 [node name="track_08_orb_label" type="Label" parent="trackNumbers/track_08_button"]
-visible = false
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -2.85714
-anchor_top = -2.25
-anchor_right = 2.85714
-anchor_bottom = 2.0
-offset_top = 1.0
-offset_bottom = 1.0
+anchor_left = -2.71428
+anchor_top = -1.25
+anchor_right = 3.0
+anchor_bottom = 3.0
+offset_left = -0.999994
+offset_top = -8.0
+offset_right = -0.999992
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -574,7 +621,6 @@ theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 24
 text = "8"
 horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="track_09_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
 self_modulate = Color(0, 1, 0.270588, 1)
@@ -582,21 +628,21 @@ layout_mode = 2
 texture_normal = ExtResource("13_pq5h4")
 
 [node name="track_09_orb" type="Sprite2D" parent="trackNumbers/track_09_button"]
-visible = false
 modulate = Color(0, 1, 0.270588, 1)
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("2_jfwso")
 
 [node name="track_09_orb_label" type="Label" parent="trackNumbers/track_09_button"]
-visible = false
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -2.85714
-anchor_top = -2.25
-anchor_right = 2.85714
-anchor_bottom = 2.0
-offset_top = 1.0
-offset_bottom = 1.0
+anchor_left = -2.71428
+anchor_top = -1.25
+anchor_right = 3.0
+anchor_bottom = 3.0
+offset_left = -0.999994
+offset_top = -8.0
+offset_right = -0.999992
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -607,7 +653,6 @@ theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 24
 text = "9"
 horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="track_10_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
 self_modulate = Color(0, 1, 0.270588, 1)
@@ -616,21 +661,21 @@ focus_neighbor_right = NodePath("../../playbackButtons/play_button")
 texture_normal = ExtResource("13_pq5h4")
 
 [node name="track_10_orb" type="Sprite2D" parent="trackNumbers/track_10_button"]
-visible = false
 modulate = Color(0, 1, 0.270588, 1)
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("2_jfwso")
 
 [node name="track_10_orb_label" type="Label" parent="trackNumbers/track_10_button"]
-visible = false
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -2.85714
-anchor_top = -2.25
-anchor_right = 2.85714
-anchor_bottom = 2.0
-offset_top = 1.0
-offset_bottom = 1.0
+anchor_left = -2.71428
+anchor_top = -1.25
+anchor_right = 3.0
+anchor_bottom = 3.0
+offset_left = -0.999994
+offset_top = -8.0
+offset_right = -0.999992
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -641,7 +686,6 @@ theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 24
 text = "10"
 horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="track_11_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
 self_modulate = Color(1, 0, 0, 1)
@@ -650,21 +694,21 @@ focus_neighbor_left = NodePath("../../playbackButtons/stop_button")
 texture_normal = ExtResource("13_pq5h4")
 
 [node name="track_11_orb" type="Sprite2D" parent="trackNumbers/track_11_button"]
-visible = false
 modulate = Color(1, 0, 0, 1)
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("2_jfwso")
 
 [node name="track_11_orb_label" type="Label" parent="trackNumbers/track_11_button"]
-visible = false
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -2.85714
-anchor_top = -2.25
-anchor_right = 2.85714
-anchor_bottom = 2.0
-offset_top = 1.0
-offset_bottom = 1.0
+anchor_left = -2.71428
+anchor_top = -1.25
+anchor_right = 3.0
+anchor_bottom = 3.0
+offset_left = -1.0
+offset_top = -8.0
+offset_right = -1.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -675,7 +719,6 @@ theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 24
 text = "11"
 horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="track_12_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
 self_modulate = Color(1, 0, 0, 1)
@@ -683,21 +726,21 @@ layout_mode = 2
 texture_normal = ExtResource("13_pq5h4")
 
 [node name="track_12_orb" type="Sprite2D" parent="trackNumbers/track_12_button"]
-visible = false
 modulate = Color(1, 0, 0, 1)
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("2_jfwso")
 
 [node name="track_12_orb_label" type="Label" parent="trackNumbers/track_12_button"]
-visible = false
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -2.85714
-anchor_top = -2.25
-anchor_right = 2.85714
-anchor_bottom = 2.0
-offset_top = 1.0
-offset_bottom = 1.0
+anchor_left = -2.71428
+anchor_top = -1.25
+anchor_right = 3.0
+anchor_bottom = 3.0
+offset_left = -1.0
+offset_top = -8.0
+offset_right = -1.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -708,7 +751,6 @@ theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 24
 text = "12"
 horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="track_13_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
 self_modulate = Color(1.5, 1.5, 0, 1)
@@ -716,21 +758,21 @@ layout_mode = 2
 texture_normal = ExtResource("13_pq5h4")
 
 [node name="track_13_orb" type="Sprite2D" parent="trackNumbers/track_13_button"]
-visible = false
 modulate = Color(1.5, 1.5, 0, 1)
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("2_jfwso")
 
 [node name="track_13_orb_label" type="Label" parent="trackNumbers/track_13_button"]
-visible = false
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -2.85714
-anchor_top = -2.25
-anchor_right = 2.85714
-anchor_bottom = 2.0
-offset_top = 1.0
-offset_bottom = 1.0
+anchor_left = -2.71428
+anchor_top = -1.25
+anchor_right = 3.0
+anchor_bottom = 3.0
+offset_left = -0.999994
+offset_top = -8.0
+offset_right = -0.999992
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -741,7 +783,6 @@ theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 24
 text = "13"
 horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="track_14_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
 self_modulate = Color(0, 1, 0.270588, 1)
@@ -749,21 +790,21 @@ layout_mode = 2
 texture_normal = ExtResource("13_pq5h4")
 
 [node name="track_14_orb" type="Sprite2D" parent="trackNumbers/track_14_button"]
-visible = false
 modulate = Color(0, 1, 0.270588, 1)
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("2_jfwso")
 
 [node name="track_14_orb_label" type="Label" parent="trackNumbers/track_14_button"]
-visible = false
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -2.85714
-anchor_top = -2.25
-anchor_right = 2.85714
-anchor_bottom = 2.0
-offset_top = 1.0
-offset_bottom = 1.0
+anchor_left = -2.71428
+anchor_top = -1.25
+anchor_right = 3.0
+anchor_bottom = 3.0
+offset_left = -0.999994
+offset_top = -8.0
+offset_right = -0.999992
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -774,7 +815,6 @@ theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 24
 text = "14"
 horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="track_15_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
 layout_mode = 2
@@ -782,20 +822,20 @@ focus_neighbor_right = NodePath("../../playbackButtons/stop_button")
 texture_normal = ExtResource("13_pq5h4")
 
 [node name="track_15_orb" type="Sprite2D" parent="trackNumbers/track_15_button"]
-visible = false
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("2_jfwso")
 
 [node name="track_15_orb_label" type="Label" parent="trackNumbers/track_15_button"]
-visible = false
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -2.85714
-anchor_top = -2.25
-anchor_right = 2.85714
-anchor_bottom = 2.0
-offset_top = 1.0
-offset_bottom = 1.0
+anchor_left = -2.71428
+anchor_top = -1.25
+anchor_right = 3.0
+anchor_bottom = 3.0
+offset_left = -0.999994
+offset_top = -8.0
+offset_right = -0.999992
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -806,7 +846,6 @@ theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 24
 text = "15"
 horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="track_16_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
 self_modulate = Color(1.2, 0, 1, 1)
@@ -816,21 +855,21 @@ focus_neighbor_bottom = NodePath("../../playbackOptions/program/program_button")
 texture_normal = ExtResource("13_pq5h4")
 
 [node name="track_16_orb" type="Sprite2D" parent="trackNumbers/track_16_button"]
-visible = false
 modulate = Color(1.2, 0, 1, 1)
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("2_jfwso")
 
 [node name="track_16_orb_label" type="Label" parent="trackNumbers/track_16_button"]
-visible = false
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -2.85714
-anchor_top = -2.25
-anchor_right = 2.85714
-anchor_bottom = 2.0
-offset_top = 1.0
-offset_bottom = 1.0
+anchor_left = -2.71428
+anchor_top = -1.25
+anchor_right = 3.0
+anchor_bottom = 3.0
+offset_left = -1.0
+offset_top = -8.0
+offset_right = -1.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -841,7 +880,6 @@ theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 24
 text = "16"
 horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="track_17_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
 self_modulate = Color(1.2, 0, 1, 1)
@@ -850,21 +888,21 @@ focus_neighbor_bottom = NodePath("../../playbackOptions/program/program_button")
 texture_normal = ExtResource("13_pq5h4")
 
 [node name="track_17_orb" type="Sprite2D" parent="trackNumbers/track_17_button"]
-visible = false
 modulate = Color(1.2, 0, 1, 1)
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("2_jfwso")
 
 [node name="track_17_orb_label" type="Label" parent="trackNumbers/track_17_button"]
-visible = false
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -2.85714
-anchor_top = -2.25
-anchor_right = 2.85714
-anchor_bottom = 2.0
-offset_top = 1.0
-offset_bottom = 1.0
+anchor_left = -2.71428
+anchor_top = -1.25
+anchor_right = 3.0
+anchor_bottom = 3.0
+offset_left = -1.0
+offset_top = -8.0
+offset_right = -1.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -875,7 +913,6 @@ theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 24
 text = "17"
 horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="track_18_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
 layout_mode = 2
@@ -883,20 +920,20 @@ focus_neighbor_bottom = NodePath("../../exit_button")
 texture_normal = ExtResource("13_pq5h4")
 
 [node name="track_18_orb" type="Sprite2D" parent="trackNumbers/track_18_button"]
-visible = false
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("2_jfwso")
 
 [node name="track_18_orb_label" type="Label" parent="trackNumbers/track_18_button"]
-visible = false
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -2.85714
-anchor_top = -2.25
-anchor_right = 2.85714
-anchor_bottom = 2.0
-offset_top = 1.0
-offset_bottom = 1.0
+anchor_left = -2.71428
+anchor_top = -1.25
+anchor_right = 3.0
+anchor_bottom = 3.0
+offset_left = -0.999994
+offset_top = -8.0
+offset_right = -0.999992
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -907,7 +944,6 @@ theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 24
 text = "18"
 horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="track_19_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
 layout_mode = 2
@@ -915,20 +951,20 @@ focus_neighbor_bottom = NodePath("../../exit_button")
 texture_normal = ExtResource("13_pq5h4")
 
 [node name="track_19_orb" type="Sprite2D" parent="trackNumbers/track_19_button"]
-visible = false
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("2_jfwso")
 
 [node name="track_19_orb_label" type="Label" parent="trackNumbers/track_19_button"]
-visible = false
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -2.85714
-anchor_top = -2.25
-anchor_right = 2.85714
-anchor_bottom = 2.0
-offset_top = 1.0
-offset_bottom = 1.0
+anchor_left = -2.71428
+anchor_top = -1.25
+anchor_right = 3.0
+anchor_bottom = 3.0
+offset_left = -0.999994
+offset_top = -8.0
+offset_right = -0.999992
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -939,7 +975,6 @@ theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 24
 text = "19"
 horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="track_20_button" type="TextureButton" parent="trackNumbers" groups=["track_buttons"]]
 layout_mode = 2
@@ -948,20 +983,20 @@ focus_neighbor_bottom = NodePath("../../unknown_button")
 texture_normal = ExtResource("13_pq5h4")
 
 [node name="track_20_orb" type="Sprite2D" parent="trackNumbers/track_20_button"]
-visible = false
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("2_jfwso")
 
 [node name="track_20_orb_label" type="Label" parent="trackNumbers/track_20_button"]
-visible = false
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -2.85714
-anchor_top = -2.25
-anchor_right = 2.85714
-anchor_bottom = 2.0
-offset_top = 1.0
-offset_bottom = 1.0
+anchor_left = -2.71428
+anchor_top = -1.25
+anchor_right = 3.0
+anchor_bottom = 3.0
+offset_left = -0.999994
+offset_top = -8.0
+offset_right = -0.999992
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -972,7 +1007,6 @@ theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 24
 text = "20"
 horizontal_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="cursor" parent="." instance=ExtResource("13_vo2kb")]
 position = Vector2(64, 184)
@@ -980,9 +1014,9 @@ position = Vector2(64, 184)
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 
 [node name="current_track_label" type="Label" parent="."]
-offset_left = 108.0
+offset_left = 107.0
 offset_top = 63.0
-offset_right = 148.0
+offset_right = 147.0
 offset_bottom = 97.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
@@ -995,9 +1029,9 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="time_label" type="Label" parent="."]
-offset_left = 213.0
+offset_left = 212.0
 offset_top = 63.0
-offset_right = 253.0
+offset_right = 322.0
 offset_bottom = 97.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
@@ -1024,10 +1058,31 @@ position = Vector2(162, 294)
 texture = ExtResource("23_83w2l")
 
 [node name="repeat_mode_sprite" type="Sprite2D" parent="."]
-position = Vector2(274, 294)
+visible = false
+position = Vector2(224, 281)
 texture = ExtResource("23_m3r4m")
+centered = false
 
 [node name="VisualiserLayer" type="CanvasLayer" parent="."]
+
+[node name="Quasar" type="ColorRect" parent="VisualiserLayer"]
+visible = false
+material = SubResource("ShaderMaterial_c4hre")
+offset_left = 111.0
+offset_top = 156.0
+offset_right = 350.0
+offset_bottom = 304.0
+color = Color(0, 0, 0, 1)
+
+[node name="SpectrumAnalyser" type="ColorRect" parent="VisualiserLayer"]
+visible = false
+material = SubResource("ShaderMaterial_2ily8")
+offset_left = 111.0
+offset_top = 156.0
+offset_right = 350.0
+offset_bottom = 304.0
+color = Color(0.592157, 0.603922, 0.94902, 1)
+script = ExtResource("27_au2s5")
 
 [node name="VisualiserRect" type="ColorRect" parent="VisualiserLayer"]
 visible = false
@@ -1036,6 +1091,22 @@ offset_left = 111.0
 offset_top = 156.0
 offset_right = 350.0
 offset_bottom = 304.0
+
+[node name="custom_music_dir" type="Button" parent="."]
+offset_left = 455.0
+offset_top = 26.0
+offset_right = 624.0
+offset_bottom = 69.0
+focus_mode = 0
+flat = true
+
+[node name="DirSelect" type="FileDialog" parent="."]
+title = "Open a Directory"
+size = Vector2i(392, 159)
+ok_button_text = "Select Current Folder"
+file_mode = 2
+access = 2
+use_native_dialog = true
 
 [connection signal="pressed" from="playbackButtons/next_button" to="." method="_on_next_button_pressed"]
 [connection signal="button_down" from="playbackButtons/seek_forward_button" to="." method="_on_seek_forward_button_button_down"]
@@ -1052,4 +1123,7 @@ offset_bottom = 304.0
 [connection signal="pressed" from="playbackOptions/shuffle_time/time_button" to="." method="_on_time_button_pressed"]
 [connection signal="pressed" from="playbackOptions/program/program_button" to="." method="_on_program_button_pressed"]
 [connection signal="pressed" from="exit_button" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="unknown_button" to="." method="_on_unknown_button_pressed"]
 [connection signal="finished" from="AudioStreamPlayer" to="." method="_on_audio_stream_player_finished"]
+[connection signal="pressed" from="custom_music_dir" to="." method="_on_custom_music_dir_pressed"]
+[connection signal="dir_selected" from="DirSelect" to="." method="_on_dir_select_dir_selected"]
